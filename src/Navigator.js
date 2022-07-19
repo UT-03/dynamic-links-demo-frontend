@@ -7,6 +7,7 @@ import { AuthContext } from './context/AuthContext';
 import AuthScreen from './screens/AuthScreen';
 // import ChatScreen from './screens/ChatScreen';
 import HomeScreen from './screens/HomeScreen';
+import { Pressable, Text } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +29,15 @@ const Navigator = () => {
                         name="home"
                         component={HomeScreen}
                         options={{
-                            title: "Chat App"
+                            title: "Dynamic Links Demo",
+                            headerRight: () => {
+                                return (
+                                    <Pressable
+                                        onPress={() => auth.logout()}>
+                                        <Text>Logout</Text>
+                                    </Pressable>
+                                )
+                            }
                         }} />
                 </>
             ) : (

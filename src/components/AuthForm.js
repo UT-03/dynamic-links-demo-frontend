@@ -54,25 +54,22 @@ const AuthForm = () => {
         else
             url = `${globalVariables.backendHost}/auth/signup`;
 
-        console.log(url, inputs);
-
-
-        // return sendRequest(url,
-        //     'POST',
-        //     JSON.stringify({
-        //         name: inputs.name.value,
-        //         phoneNumber: inputs.phoneNumber.value,
-        //         password: inputs.password.value
-        //     }),
-        //     {
-        //         'Content-Type': 'application/json'
-        //     }
-        // )
-        //     .then(res => {
-        //         auth.login(res.token, res.userId);
-        //     })
-        //     .catch(err => {
-        //     })
+        return sendRequest(url,
+            'POST',
+            JSON.stringify({
+                name: inputs.name.value,
+                phoneNumber: inputs.phoneNumber.value,
+                password: inputs.password.value
+            }),
+            {
+                'Content-Type': 'application/json'
+            }
+        )
+            .then(res => {
+                auth.login(res.token, res.userId);
+            })
+            .catch(err => {
+            })
     }
 
     return (
