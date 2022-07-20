@@ -9,7 +9,7 @@ import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import Input from './Input';
 
-const AuthForm = () => {
+const AuthForm = ({ inviteeId }) => {
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [inputs, setInputs] = useState({
         name: {
@@ -54,12 +54,15 @@ const AuthForm = () => {
         else
             url = `${globalVariables.backendHost}/auth/signup`;
 
+        console.log(url, inviteeId, inputs);
+
         return sendRequest(url,
             'POST',
             JSON.stringify({
                 name: inputs.name.value,
                 phoneNumber: inputs.phoneNumber.value,
-                password: inputs.password.value
+                password: inputs.password.value,
+                inviteeId: inviteeId
             }),
             {
                 'Content-Type': 'application/json'

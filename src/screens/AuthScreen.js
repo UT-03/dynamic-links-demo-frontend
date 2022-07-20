@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import AuthForm from '../components/AuthForm';
 import colors from '../constants/colors';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const AuthScreen = () => {
+    const [inviteeId, setInviteeId] = useState();
+
+    useEffect(() => {
+        console.log(inviteeId)
+    }, [inviteeId]);
+
     useEffect(() => {
         const fetchInitialLink = () => {
             return dynamicLinks().getInitialLink()
                 .then(url => {
-                    console.log('incoming url', url);
+                    if (url && url.url.includes('invitedBy')) {
+                        setInviteeId(() => url.url.split('=')[1])
+                    }
                 })
                 .catch(err => {
                     console.log(err);
@@ -22,7 +30,7 @@ const AuthScreen = () => {
     return (
         <>
             <View style={styles.rootContainer}>
-                <AuthForm />
+                <AuthForm inviteeId={inviteeId} />
             </View>
         </>
     );
