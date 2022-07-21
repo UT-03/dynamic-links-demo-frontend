@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import firebaseDynamicLinks from '@react-native-firebase/dynamic-links';
 import Button from '../components/Button';
 import colors from '../constants/colors';
 import Clipboard from '@react-native-community/clipboard';
@@ -16,24 +15,26 @@ const HomeScreen = () => {
     const { sendRequest } = useHttpClient();
 
     useEffect(() => {
-        const createInviteLink = () => {
-            const link = `https://dynamiclinksdemo123456.page.link?invitedBy=${auth.userId}`;
-            const dynamicLinkDomain = 'https://dynamiclinksdemo123456.page.link';
-            const dynamicLink = firebaseDynamicLinks().buildShortLink({
-                link: link,
-                domainUriPrefix: dynamicLinkDomain,
-                suffix: {
-                    option: 'SHORT'
+        const fetchInviteLink = () => {
+            return sendRequest(
+                `${globalVariables.backendHost}/user/invite-link`,
+                'GET',
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + auth.token,
                 }
-            }, firebaseDynamicLinks.ShortLinkType.SHORT);
-            return dynamicLink;
-        }
+            );
+        };
 
-        createInviteLink()
-            .then(link => {
-                setInviteLink(link);
+        fetchInviteLink()
+            .then(res => {
+                setInviteLink(res.inviteLink);
             })
-    })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
 
     const handleGamePlay = () => {
         sendRequest(
@@ -42,7 +43,7 @@ const HomeScreen = () => {
             null,
             {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + auth.token
+                'Authorization': 'Bearer ' + auth.token,
             }
         )
             .then(() => {
@@ -53,14 +54,14 @@ const HomeScreen = () => {
                         null,
                         {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + auth.token
+                            'Authorization': 'Bearer ' + auth.token,
                         }
                     )
                         .then(() => auth.confirmOneGamePlay())
-                        .catch(err => { })
+                        .catch(err => { });
                 }
-            })
-    }
+            });
+    };
 
     return (
         <View>
@@ -69,7 +70,7 @@ const HomeScreen = () => {
             </Text>
             <Button
                 color={colors.primary500}
-                textColor='white'
+                textColor="white"
                 title="Copy"
                 onPress={() => {
                     Clipboard.setString(inviteLink);
@@ -87,6 +88,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
     inviteLinkText: {
-        color: 'black'
-    }
-})
+        color: 'black',
+    },
+});

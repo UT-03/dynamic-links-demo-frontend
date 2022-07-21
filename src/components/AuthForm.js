@@ -14,20 +14,20 @@ const AuthForm = ({ inviteeId }) => {
     const [inputs, setInputs] = useState({
         name: {
             value: '',
-            isValid: true
+            isValid: true,
         },
         phoneNumber: {
             value: '',
-            isValid: true
+            isValid: true,
         },
         password: {
             value: '',
-            isValid: true
+            isValid: true,
         },
         confirmPassword: {
             value: '',
-            isValid: true
-        }
+            isValid: true,
+        },
     });
 
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -41,18 +41,16 @@ const AuthForm = ({ inviteeId }) => {
                 [inputIdentifier]: { value: enteredValue, isValid: true },
             };
         });
-    }
+    };
 
     const modeHandler = () => {
         setIsLoginMode(currState => !currState);
-    }
+    };
 
     const submitHandler = () => {
         let url;
-        if (isLoginMode)
-            url = `${globalVariables.backendHost}/auth/login`;
-        else
-            url = `${globalVariables.backendHost}/auth/signup`;
+        if (isLoginMode) { url = `${globalVariables.backendHost}/auth/login`; }
+        else { url = `${globalVariables.backendHost}/auth/signup`; }
 
         return sendRequest(url,
             'POST',
@@ -60,18 +58,18 @@ const AuthForm = ({ inviteeId }) => {
                 name: inputs.name.value,
                 phoneNumber: inputs.phoneNumber.value,
                 password: inputs.password.value,
-                inviteeId: inviteeId
+                inviteeId: inviteeId,
             }),
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         )
             .then(res => {
                 auth.login(res.token, res.userId, res.isInvited, res.hasPlayedAtLeastOneGame);
             })
             .catch(err => {
-            })
-    }
+            });
+    };
 
     return (
         <>
@@ -90,7 +88,7 @@ const AuthForm = ({ inviteeId }) => {
                                     invalid={!inputs.name.isValid}
                                     textInputConfig={{
                                         value: inputs.name.value,
-                                        onChangeText: (enteredValue) => inputChangedHandler('name', enteredValue)
+                                        onChangeText: (enteredValue) => inputChangedHandler('name', enteredValue),
                                     }} />
                             )}
                             <Input
@@ -99,7 +97,7 @@ const AuthForm = ({ inviteeId }) => {
                                 textInputConfig={{
                                     keyboardType: 'decimal-pad',
                                     value: inputs.phoneNumber.value,
-                                    onChangeText: (enteredValue) => inputChangedHandler('phoneNumber', enteredValue)
+                                    onChangeText: (enteredValue) => inputChangedHandler('phoneNumber', enteredValue),
                                 }} />
                             <Input
                                 label="Password"
@@ -108,7 +106,7 @@ const AuthForm = ({ inviteeId }) => {
                                     secureTextEntry: true,
                                     value: inputs.password.value,
                                     autoCapitalize: 'none',
-                                    onChangeText: (enteredValue) => inputChangedHandler('password', enteredValue)
+                                    onChangeText: (enteredValue) => inputChangedHandler('password', enteredValue),
                                 }} />
                             {!isLoginMode && (
                                 <Input
@@ -117,13 +115,13 @@ const AuthForm = ({ inviteeId }) => {
                                     textInputConfig={{
                                         secureTextEntry: true,
                                         value: inputs.confirmPassword.value,
-                                        onChangeText: (enteredValue) => inputChangedHandler('confirmPassword', enteredValue)
+                                        onChangeText: (enteredValue) => inputChangedHandler('confirmPassword', enteredValue),
                                     }} />
                             )}
 
                             <Button
                                 color={colors.primary500}
-                                textColor='white'
+                                textColor="white"
                                 title={isLoginMode ? 'Login' : 'Signup'}
                                 onPress={submitHandler} />
                             <View>
@@ -157,14 +155,14 @@ const styles = StyleSheet.create({
     heading: {
         color: colors.primary500,
         textAlign: 'center',
-        fontSize: 24
+        fontSize: 24,
     },
     textHighlightContainer: {
         textAlign: 'center',
-        marginTop: 6
+        marginTop: 6,
     },
     textHighlight: {
         fontWeight: 'bold',
-        color: colors.primary500
-    }
-})
+        color: colors.primary500,
+    },
+});
