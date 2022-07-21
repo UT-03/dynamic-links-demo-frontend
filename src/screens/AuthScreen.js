@@ -15,6 +15,7 @@ const AuthScreen = () => {
         const fetchInitialLink = () => {
             return dynamicLinks().getInitialLink()
                 .then(url => {
+                    console.log(url);
                     if (url && url.url.includes('invitedBy')) {
                         setInviteeId(() => url.url.split('=')[1])
                     }

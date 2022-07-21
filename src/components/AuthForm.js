@@ -69,7 +69,7 @@ const AuthForm = ({ inviteeId }) => {
             }
         )
             .then(res => {
-                auth.login(res.token, res.userId);
+                auth.login(res.token, res.userId, res.isInvited, res.hasPlayedAtLeastOneGame);
             })
             .catch(err => {
             })

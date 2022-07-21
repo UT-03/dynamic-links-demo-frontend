@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Navigator from './Navigator';
 
 const App = () => {
-  const { token, userId, login, logout, checked } = useAuth();
+  const { token, userId, isInvited, hasPlayedAtLeastOneGame, login, logout, checked } = useAuth();
 
   return (
     <>
@@ -17,7 +17,9 @@ const App = () => {
             token: token,
             login: login,
             logout: logout,
-            userId: userId
+            userId: userId,
+            isInvited: isInvited,
+            hasPlayedAtLeastOneGame: hasPlayedAtLeastOneGame,
           }}
         >
           <NavigationContainer>

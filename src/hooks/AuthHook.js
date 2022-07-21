@@ -6,21 +6,29 @@ const KEY = 'dynamic-linking-demo-user-details';
 export const useAuth = () => {
     const [token, setToken] = useState();
     const [userId, setUserId] = useState();
+    const [isInvited, setIsInvited] = useState();
+    const [hasPlayedAtLeastOneGame, setHasPlayedAtLeastOneGame] = useState();
     const [checked, setChecked] = useState(false);
 
-    const login = useCallback(async (token, userId) => {
+    const login = useCallback(async (token, userId, isInvited, hasPlayedAtLeastOneGame) => {
         setToken(token);
         setUserId(userId);
+        setIsInvited(isInvited);
+        setHasPlayedAtLeastOneGame(hasPlayedAtLeastOneGame);
 
         await AsyncStorage.setItem(KEY, JSON.stringify({
             userId: userId,
-            token: token
+            token: token,
+            isInvited: isInvited,
+            hasPlayedAtLeastOneGame: hasPlayedAtLeastOneGame,
         }));
     }, []);
 
     const logout = useCallback(async () => {
         setToken(null);
         setUserId(null);
+        setIsInvited(null);
+        setHasPlayedAtLeastOneGame(null);
 
         await AsyncStorage.removeItem(KEY);
     }, []);
@@ -33,12 +41,12 @@ export const useAuth = () => {
 
                 const data = JSON.parse(res);
 
-                login(data.token, data.userId)
+                login(data.token, data.userId, data.isInvited, data.hasPlayedAtLeastOneGame);
             })
             .finally(() => {
                 setChecked(true);
             })
     }, [login]);
 
-    return { token, userId, checked, login, logout };
+    return { token, userId, isInvited, hasPlayedAtLeastOneGame, checked, login, logout };
 };
