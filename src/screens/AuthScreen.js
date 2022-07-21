@@ -8,21 +8,17 @@ const AuthScreen = () => {
     const [inviteeId, setInviteeId] = useState();
 
     useEffect(() => {
-        console.log(inviteeId)
     }, [inviteeId]);
 
     useEffect(() => {
         const fetchInitialLink = () => {
             return dynamicLinks().getInitialLink()
                 .then(url => {
-                    console.log(url);
                     if (url && url.url.includes('invitedBy')) {
                         setInviteeId(() => url.url.split('=')[1])
                     }
                 })
-                .catch(err => {
-                    console.log(err);
-                })
+                .catch(() => { })
         }
 
         fetchInitialLink();

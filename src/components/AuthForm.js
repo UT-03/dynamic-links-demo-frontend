@@ -54,8 +54,6 @@ const AuthForm = ({ inviteeId }) => {
         else
             url = `${globalVariables.backendHost}/auth/signup`;
 
-        console.log(url, inviteeId, inputs);
-
         return sendRequest(url,
             'POST',
             JSON.stringify({

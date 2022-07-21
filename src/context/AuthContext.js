@@ -7,5 +7,6 @@ export const AuthContext = createContext({
     login: () => { },
     logout: () => { },
     isInvited: null,
-    hasPlayedAtLeastOneGame: null
+    hasPlayedAtLeastOneGame: null,
+    confirmOneGamePlay: () => { }
 });

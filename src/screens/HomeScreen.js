@@ -5,20 +5,27 @@ import firebaseDynamicLinks from '@react-native-firebase/dynamic-links';
 import Button from '../components/Button';
 import colors from '../constants/colors';
 import Clipboard from '@react-native-community/clipboard';
+import { useHttpClient } from '../hooks/HttpHook';
+import globalVariables from '../constants/globalVariables';
 
 const HomeScreen = () => {
     const auth = useContext(AuthContext);
 
     const [inviteLink, setInviteLink] = useState('');
 
+    const { sendRequest } = useHttpClient();
+
     useEffect(() => {
         const createInviteLink = () => {
-            const link = `https://dynamiclinkdemodgdfgdfgdfgdfg.page.link?invitedBy=${auth.userId}`;
-            const dynamicLinkDomain = 'https://dynamiclinkdemodgdfgdfgdfgdfg.page.link';
-            const dynamicLink = firebaseDynamicLinks().buildLink({
+            const link = `https://dynamiclinksdemo123456.page.link?invitedBy=${auth.userId}`;
+            const dynamicLinkDomain = 'https://dynamiclinksdemo123456.page.link';
+            const dynamicLink = firebaseDynamicLinks().buildShortLink({
                 link: link,
-                domainUriPrefix: dynamicLinkDomain
-            })
+                domainUriPrefix: dynamicLinkDomain,
+                suffix: {
+                    option: 'SHORT'
+                }
+            }, firebaseDynamicLinks.ShortLinkType.SHORT);
             return dynamicLink;
         }
 
@@ -27,6 +34,33 @@ const HomeScreen = () => {
                 setInviteLink(link);
             })
     })
+
+    const handleGamePlay = () => {
+        sendRequest(
+            `${globalVariables.backendHost}/user/play-game`,
+            'POST',
+            null,
+            {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + auth.token
+            }
+        )
+            .then(() => {
+                if (auth.isInvited && !auth.hasPlayedAtLeastOneGame) {
+                    sendRequest(
+                        `${globalVariables.backendHost}/user/confirm-reward`,
+                        'POST',
+                        null,
+                        {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + auth.token
+                        }
+                    )
+                        .then(() => auth.confirmOneGamePlay())
+                        .catch(err => { })
+                }
+            })
+    }
 
     return (
         <View>
@@ -40,6 +74,11 @@ const HomeScreen = () => {
                 onPress={() => {
                     Clipboard.setString(inviteLink);
                 }} />
+            <Button
+                color={colors.primary500}
+                textColor="white"
+                title="Play Game"
+                onPress={handleGamePlay} />
         </View>
     );
 };

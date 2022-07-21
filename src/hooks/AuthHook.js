@@ -33,6 +33,23 @@ export const useAuth = () => {
         await AsyncStorage.removeItem(KEY);
     }, []);
 
+    const confirmOneGamePlay = useCallback(async () => {
+        setHasPlayedAtLeastOneGame(true);
+        AsyncStorage.getItem(KEY)
+            .then(async (res) => {
+                if (!res)
+                    return;
+
+                return JSON.parse(res);
+            })
+            .then(async (data) => {
+                await AsyncStorage.setItem(KEY, JSON.stringify({
+                    ...data,
+                    hasPlayedAtLeastOneGame: true,
+                }));
+            })
+    }, []);
+
     useEffect(() => {
         AsyncStorage.getItem(KEY)
             .then(res => {
@@ -48,5 +65,5 @@ export const useAuth = () => {
             })
     }, [login]);
 
-    return { token, userId, isInvited, hasPlayedAtLeastOneGame, checked, login, logout };
+    return { token, userId, isInvited, hasPlayedAtLeastOneGame, checked, login, logout, confirmOneGamePlay };
 };

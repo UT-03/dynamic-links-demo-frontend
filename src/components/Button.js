@@ -21,11 +21,12 @@ export default Button;
 
 const styles = StyleSheet.create({
     outerContainer: {
-        alignItems: 'center'
+        alignItems: 'center',
+        margin: 6
     },
     buttonContainer: {
         alignItems: 'center',
-        maxWidth: 100
+        maxWidth: 150
     },
     pressable: {
         paddingVertical: 16,
